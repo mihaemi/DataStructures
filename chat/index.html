@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="chat">
+        <ol id="messages-list">
+            <!-- <li>Hi There</li> -->
+        </ol>
+        <hr>
+        <div id="form">
+            <input type="text" id="message-input">
+            <button id="message-send" onclick="send();render(messages)">SEND</button>
+        </div>
+    </div>
+
+    <script>
+        let messages = JSON.parse(localStorage.getItem("messages"))
+        const badWords = ["sh!t"]
+
+        const render = (messages) => {
+            let list = document.getElementById("messages-list")
+            list.innerHTML = ``
+            messages.forEach(message => {
+                let li = document.createElement("li")
+                    message = message.replace(":)", `<img src="icons/icon.png">`)
+                    li.innerHTML = message
+                    list.appendChild(li)
+            })
+        }
+
+        const send = () => {
+            let input = document.getElementById("message-input")
+            let message = input.value 
+
+            // HW 1: validate input -> not empty ,remove white spaces
+            if (message.length == 0) {
+                alert("Enter some text")
+                return
+            }
+
+            // HW 2: check if badWords are present in text
+            //      for/loop -> badWords -> string.method ?? if included in text
+            //      if a bad word found --> do not render that message -> instead render "[censored]"" 
+
+            messages.push(message.replace(/\s/g, ""))
+
+            // HW 3: keep it under 10 messages
+            // for(let i=Math.max(messages.length - 10,0); i<messages.length; i++) {}
+
+            //// store data
+            localStorage.setItem("messages", JSON.stringify(messages))
+
+            input.value = ""
+
+            // HW 4: reverse the messages order
+        }
+
+        render(messages)
+        
+    </script>
+</body>
